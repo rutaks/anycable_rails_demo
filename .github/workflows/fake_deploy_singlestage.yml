@@ -1,9 +1,9 @@
-name: Benchmarking fake deploy with multistage Dockerfile
+name: Benchmarking fake deploy with single stage Dockerfile
 on: [push]
 
 jobs:
   # This job uses Buildx layer caching
-  fake_deploy_cache:
+  fake_deploy_cache_single:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -47,7 +47,7 @@ jobs:
             mv /tmp/.buildx-cache-new /tmp/.buildx-cache
   
    # This job builds an image from scratch every time without cache
-  fake_deploy_no_cache:
+  fake_deploy_no_cache_single:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
