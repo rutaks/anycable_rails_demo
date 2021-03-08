@@ -23,9 +23,9 @@ jobs:
         uses: actions/cache@v2
         with:
           path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-single-${{ github.sha }}
+          key: ${{ runner.os }}-single-buildx-${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-buildx-single
+            ${{ runner.os }}-single-buildx
       
       - name: Build production image
         uses: docker/build-push-action@v2
