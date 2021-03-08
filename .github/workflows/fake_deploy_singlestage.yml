@@ -1,4 +1,4 @@
-name: Benchmarking fake deploy with single stage Dockerfile
+name: Fake deploy with normal Dockerfile
 on: [push]
 
 jobs:
