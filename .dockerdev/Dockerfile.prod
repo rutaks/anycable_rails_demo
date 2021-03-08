@@ -44,7 +44,6 @@ RUN apt-get update -qq && DEBIAN_FRONTEND=noninteractive apt-get -yq dist-upgrad
   rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
   truncate -s 0 /var/log/*log
 
-
 ENV GEM_HOME=/usr/local/bundle
 ENV BUNDLE_PATH=$GEM_HOME
 ENV BUNDLE_APP_CONFIG=$BUNDLE_PATH
@@ -60,12 +59,16 @@ RUN groupadd --gid 1001 nonroot \
   && useradd --uid 1001 --gid nonroot --shell /bin/bash --create-home nonroot
 
 WORKDIR /app
-COPY --chown=nonroot:nonroot . /app
 
 # Upgrade RubyGems and install required Bundler version
 RUN gem update --system && \
   rm -f /usr/local/bin/ruby/gems/*/specifications/default/bundler-*.gemspec && \
   gem install bundler -v $BUNDLER_VERSION
+
+COPY --chown=nonroot:nonroot ./Gemfile /app/Gemfile
+COPY --chown=nonroot:nonroot ./Gemfile.lock /app/Gemfile.lock
+COPY --chown=nonroot:nonroot package.json /app/
+COPY --chown=nonroot:nonroot yarn.lock /app/
 
 ENV RAILS_ENV=production
 ENV NODE_ENV=production
@@ -78,6 +81,8 @@ RUN bundle config set --local without 'development test' \
 
 RUN yarn install \
   && (rm -rf /tmp/* || true)
+
+COPY --chown=nonroot:nonroot . /app
 
 RUN bundle exec rails assets:precompile \
   && yarn cache clean \
