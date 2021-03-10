@@ -84,8 +84,8 @@ RUN yarn install \
 
 COPY --chown=nonroot:nonroot . /app
 
-RUN bundle exec rails assets:precompile \
-  && yarn cache clean \
+RUN --mount=source=tmp/webpacker/cache,target=tmp/webpacker/cache,rw --mount=source=public/packs,target=public/packs,rw \
+  bundle exec rails assets:precompile \
   && (rm -rf /tmp/* || true) \
   # Cleanup
   && rm -rf $BUNDLE_PATH/*.gem \
